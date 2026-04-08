@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
 import Link from "next/link";
+import { formatBrazilPhoneDisplay } from "@/lib/phone-format";
 import { buildWhatsappHref } from "@/lib/whatsapp-url";
 
 import {
@@ -48,7 +49,11 @@ export function LeadMobileCards({
         const hasGoogle =
           (rating != null && rating > 0) ||
           (lead.google_review_count != null && lead.google_review_count > 0);
-        const phoneLine = [lead.phone, lead.whatsapp_number].filter(Boolean).join(" · ");
+        const phoneLine = [lead.phone, lead.whatsapp_number]
+          .filter(Boolean)
+          .map((v) => formatBrazilPhoneDisplay(v!))
+          .filter(Boolean)
+          .join(" · ");
         const waHref = buildWhatsappHref(lead.whatsapp_number);
 
         return (

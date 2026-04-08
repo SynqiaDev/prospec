@@ -60,7 +60,11 @@ export function createLeadColumns(handlers: {
     {
       accessorKey: "phone",
       header: "Telefone",
-      cell: ({ row }) => row.getValue("phone") || "—",
+      cell: ({ row }) => {
+        const raw = row.getValue("phone") as string | null;
+        if (!raw?.trim()) return "—";
+        return formatBrazilPhoneDisplay(raw) || "—";
+      },
     },
     {
       accessorKey: "whatsapp_number",
@@ -69,9 +73,10 @@ export function createLeadColumns(handlers: {
         const raw = row.getValue("whatsapp_number") as string | null;
         const href = buildWhatsappHref(raw);
         if (!raw?.trim()) return "—";
+        const display = formatBrazilPhoneDisplay(raw);
         return (
           <div className="flex max-w-[220px] items-center gap-1">
-            <span className="truncate text-sm">{raw}</span>
+            <span className="truncate text-sm">{display}</span>
             {href ? (
               <Tooltip>
                 <TooltipTrigger asChild>
