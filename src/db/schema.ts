@@ -113,3 +113,30 @@ export const leads = pgTable("leads", {
     .$onUpdate(() => dayjs().toDate()),
 });
 
+export const leadTimelineEntries = pgTable("lead_timeline_entries", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  lead_id: uuid("lead_id")
+    .notNull()
+    .references(() => leads.id, { onDelete: "cascade" }),
+  project_id: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  author_user_id: text("author_user_id").references(() => usersTable.id, {
+    onDelete: "set null",
+  }),
+  entry_type: text("entry_type").notNull().default("note"),
+  channel: text("channel"),
+  direction: text("direction"),
+  body: text("body").notNull(),
+  outcome: text("outcome"),
+  occurred_at: timestamp("occurred_at", { withTimezone: true }).notNull().defaultNow(),
+  follow_up_at: timestamp("follow_up_at", { withTimezone: true }),
+  created_at: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => dayjs().toDate()),
+});
+

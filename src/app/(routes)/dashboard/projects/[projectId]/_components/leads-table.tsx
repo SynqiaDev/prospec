@@ -21,15 +21,15 @@ export const LeadsTable = ({ projectId, leads }: LeadsTableProps) => {
   const [editLead, setEditLead] = useState<LeadRow | null>(null);
   const [deleteLead, setDeleteLead] = useState<LeadRow | null>(null);
   const [convertLead, setConvertLead] = useState<LeadRow | null>(null);
-
   const columns = useMemo(
     () =>
       createLeadColumns({
+        projectId,
         onEdit: setEditLead,
         onDelete: setDeleteLead,
         onConvert: setConvertLead,
       }),
-    [],
+    [projectId],
   );
 
   const refresh = () => router.refresh();
@@ -41,6 +41,7 @@ export const LeadsTable = ({ projectId, leads }: LeadsTableProps) => {
       </div>
       <div className="xl:hidden">
         <LeadMobileCards
+          projectId={projectId}
           leads={leads}
           onEdit={setEditLead}
           onDelete={setDeleteLead}

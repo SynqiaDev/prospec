@@ -2,11 +2,12 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { InferSelectModel } from "drizzle-orm";
+import { BookText, Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { leads } from "@/db/schema";
-import { Pencil, Star, Trash2, UserCheck } from "lucide-react";
 
 export type LeadRow = InferSelectModel<typeof leads>;
 
@@ -43,6 +44,7 @@ export const conversionVariants: Record<
 };
 
 export function createLeadColumns(handlers: {
+  projectId: string;
   onEdit: (lead: LeadRow) => void;
   onDelete: (lead: LeadRow) => void;
   onConvert: (lead: LeadRow) => void;
@@ -153,6 +155,16 @@ export function createLeadColumns(handlers: {
                 <TooltipContent>Marcar convertido</TooltipContent>
               </Tooltip>
             ) : null}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                  <Link href={`/dashboard/projects/${handlers.projectId}/leads/${lead.id}`} aria-label="Histórico">
+                    <BookText className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Histórico</TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button

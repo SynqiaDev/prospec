@@ -3,7 +3,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import { BookText, Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import Link from "next/link";
 
 import {
   contactStatusLabels,
@@ -14,6 +15,7 @@ import {
 } from "./lead-columns";
 
 interface LeadMobileCardsProps {
+  projectId: string;
   leads: LeadRow[];
   onEdit: (lead: LeadRow) => void;
   onDelete: (lead: LeadRow) => void;
@@ -21,6 +23,7 @@ interface LeadMobileCardsProps {
 }
 
 export function LeadMobileCards({
+  projectId,
   leads,
   onEdit,
   onDelete,
@@ -73,6 +76,19 @@ export function LeadMobileCards({
                 ) : null}
               </div>
               <div className="flex shrink-0 items-center gap-0.5">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                      <Link
+                        href={`/dashboard/projects/${projectId}/leads/${lead.id}`}
+                        aria-label="Histórico do lead"
+                      >
+                        <BookText className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Histórico</TooltipContent>
+                </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
