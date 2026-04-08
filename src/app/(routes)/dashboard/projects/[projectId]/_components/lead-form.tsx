@@ -77,6 +77,19 @@ function parseReviewCount(s: string | undefined): number | undefined {
   return n;
 }
 
+function emptyOptionalText(s: string | undefined): string | null {
+  if (s == null || s.trim() === "") return null;
+  return s;
+}
+
+function optionalNumberOrNull(
+  raw: string | undefined,
+  parse: (s: string | undefined) => number | undefined,
+): number | null {
+  if (raw == null || raw.trim() === "") return null;
+  return parse(raw) ?? null;
+}
+
 const CONTACT_OPTIONS = [
   { value: "pending", label: "Pendente" },
   { value: "contacted", label: "Contatado" },
@@ -166,12 +179,33 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
   const busy = createStatus === "executing" || updateStatus === "executing";
 
   const onSubmit = (values: LeadFormValues) => {
-    const google_rating = parseRating(values.google_rating);
-    const google_review_count = parseReviewCount(values.google_review_count);
     const contact_date = parseOptionalDate(values.contact_date);
     const conversion_date = parseOptionalDate(values.conversion_date);
 
-    const base = {
+    if (isEdit && defaultValues) {
+      executeUpdate({
+        id: defaultValues.id,
+        name: values.name,
+        address: emptyOptionalText(values.address),
+        phone: emptyOptionalText(values.phone),
+        whatsapp_number: emptyOptionalText(values.whatsapp_number),
+        website_url: emptyOptionalText(values.website_url),
+        google_rating: optionalNumberOrNull(values.google_rating, parseRating),
+        google_review_count: optionalNumberOrNull(values.google_review_count, parseReviewCount),
+        observations: emptyOptionalText(values.observations),
+        contact_status: values.contact_status,
+        contact_date: contact_date ?? null,
+        conversion_status: values.conversion_status,
+        conversion_date: conversion_date ?? null,
+        project_id: projectId,
+      });
+      return;
+    }
+
+    const google_rating = parseRating(values.google_rating);
+    const google_review_count = parseReviewCount(values.google_review_count);
+
+    executeCreate({
       name: values.name,
       address: values.address || undefined,
       phone: values.phone || undefined,
@@ -185,16 +219,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
       conversion_status: values.conversion_status,
       conversion_date: conversion_date ?? null,
       project_id: projectId,
-    };
-
-    if (isEdit && defaultValues) {
-      executeUpdate({
-        id: defaultValues.id,
-        ...base,
-      });
-    } else {
-      executeCreate(base);
-    }
+    });
   };
 
   return (

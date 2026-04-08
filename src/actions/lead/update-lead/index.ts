@@ -11,13 +11,13 @@ import { actionClient } from "@/lib/next-safe-action";
 const schema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, "Nome é obrigatório"),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  whatsapp_number: z.string().optional(),
-  website_url: z.string().optional(),
-  google_rating: z.number().min(0).max(5).optional().nullable(),
-  google_review_count: z.number().int().min(0).optional(),
-  observations: z.string().optional(),
+  address: z.string().nullish(),
+  phone: z.string().nullish(),
+  whatsapp_number: z.string().nullish(),
+  website_url: z.string().nullish(),
+  google_rating: z.number().min(0).max(5).nullish(),
+  google_review_count: z.number().int().min(0).nullish(),
+  observations: z.string().nullish(),
   contact_status: z.string().default("pending"),
   contact_date: z.coerce.date().optional().nullable(),
   conversion_status: z.string().default("not_converted"),
@@ -35,8 +35,11 @@ export const updateLead = actionClient
       .update(leads)
       .set({
         ...rest,
-        google_rating: google_rating ?? undefined,
-        google_review_count: google_review_count ?? undefined,
+        google_rating: google_rating === null ? null : google_rating,
+        google_review_count:
+          google_review_count === undefined
+            ? undefined
+            : (google_review_count ?? 0),
         contact_date: contact_date ?? null,
         conversion_date: conversion_date ?? null,
       })
