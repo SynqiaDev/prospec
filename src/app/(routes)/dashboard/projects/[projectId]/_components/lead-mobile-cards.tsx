@@ -3,8 +3,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { BookText, Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import { BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
 import Link from "next/link";
+import { buildWhatsappHref } from "@/lib/whatsapp-url";
 
 import {
   contactStatusLabels,
@@ -48,6 +49,7 @@ export function LeadMobileCards({
           (rating != null && rating > 0) ||
           (lead.google_review_count != null && lead.google_review_count > 0);
         const phoneLine = [lead.phone, lead.whatsapp_number].filter(Boolean).join(" · ");
+        const waHref = buildWhatsappHref(lead.whatsapp_number);
 
         return (
           <li
@@ -76,6 +78,18 @@ export function LeadMobileCards({
                 ) : null}
               </div>
               <div className="flex shrink-0 items-center gap-0.5">
+                {waHref ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                        <a href={waHref} target="_blank" rel="noreferrer" aria-label="Abrir WhatsApp">
+                          <MessageCircle className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>WhatsApp</TooltipContent>
+                  </Tooltip>
+                ) : null}
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-8 w-8" asChild>

@@ -2,12 +2,14 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { InferSelectModel } from "drizzle-orm";
-import { BookText, Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import { BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { leads } from "@/db/schema";
+import { formatBrazilPhoneDisplay } from "@/lib/phone-format";
+import { buildWhatsappHref } from "@/lib/whatsapp-url";
 
 export type LeadRow = InferSelectModel<typeof leads>;
 
@@ -63,7 +65,28 @@ export function createLeadColumns(handlers: {
     {
       accessorKey: "whatsapp_number",
       header: "WhatsApp",
-      cell: ({ row }) => row.getValue("whatsapp_number") || "—",
+      cell: ({ row }) => {
+        const raw = row.getValue("whatsapp_number") as string | null;
+        const href = buildWhatsappHref(raw);
+        if (!raw?.trim()) return "—";
+        return (
+          <div className="flex max-w-[220px] items-center gap-1">
+            <span className="truncate text-sm">{raw}</span>
+            {href ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" asChild>
+                    <a href={href} target="_blank" rel="noreferrer" aria-label="Abrir WhatsApp">
+                      <MessageCircle className="h-4 w-4" />
+                    </a>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Abrir no WhatsApp</TooltipContent>
+              </Tooltip>
+            ) : null}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "website_url",
