@@ -70,10 +70,11 @@ const ENTRY_TYPE_OPTIONS = [
 ];
 
 const CHANNEL_OPTIONS = [
-  { value: "phone", label: "Telefone" },
+  { value: "phone", label: "Ligação" },
   { value: "whatsapp", label: "WhatsApp" },
   { value: "email", label: "E-mail" },
   { value: "visit", label: "Visita" },
+  { value: "instagram", label: "Instagram" },
   { value: "other", label: "Outro" },
 ];
 

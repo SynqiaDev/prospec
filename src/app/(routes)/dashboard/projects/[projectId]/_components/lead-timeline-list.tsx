@@ -19,10 +19,11 @@ const ENTRY_TYPE_LABELS: Record<string, string> = {
 };
 
 const CHANNEL_LABELS: Record<string, string> = {
-  phone: "Telefone",
+  phone: "Ligação",
   whatsapp: "WhatsApp",
   email: "E-mail",
   visit: "Visita",
+  instagram: "Instagram",
   other: "Outro",
 };
 
