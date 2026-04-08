@@ -10,7 +10,7 @@ interface GetLeadsByProjectIdParams {
 }
 
 export const getLeadsByProjectId = async (params: GetLeadsByProjectIdParams) => {
-  const { projectId, orderBy = "created_at", orderDirection = "desc" } = params;
+  const { projectId, orderBy = "name", orderDirection = "asc" } = params;
 
   const orderFn = orderDirection === "desc" ? desc : asc;
   const column = orderBy === "name" ? leads.name : leads.created_at;
@@ -19,7 +19,7 @@ export const getLeadsByProjectId = async (params: GetLeadsByProjectIdParams) => 
     .select()
     .from(leads)
     .where(eq(leads.project_id, projectId))
-    .orderBy(orderFn(column));
+    .orderBy(orderFn(column), asc(leads.id));
 };
 
 export const getLeadById = async (id: string) => {
