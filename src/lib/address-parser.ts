@@ -29,8 +29,8 @@ const BRAZILIAN_STATES = new Set([
 ]);
 
 const CEP_SEGMENT_REGEX = /^\d{5}-?\d{3}$/;
-const CITY_STATE_SEGMENT_REGEX = /^(?<city>.+?)\s*-\s*(?<state>[A-Za-z]{2})$/;
-const STATE_ONLY_SEGMENT_REGEX = /^(?<state>[A-Za-z]{2})$/;
+const CITY_STATE_SEGMENT_REGEX = /^(.+?)\s*-\s*([A-Za-z]{2})$/;
+const STATE_ONLY_SEGMENT_REGEX = /^([A-Za-z]{2})$/;
 
 export type ParsedAddress = {
   city: string | null;
@@ -71,17 +71,17 @@ export function parseBrazilAddress(address: string | null | undefined): ParsedAd
 
   const cityStateSegment = segments[cityStateIndex];
   const match = cityStateSegment.match(CITY_STATE_SEGMENT_REGEX);
-  if (!match?.groups) {
+  if (!match) {
     const stateOnlyMatch = cityStateSegment.match(STATE_ONLY_SEGMENT_REGEX);
-    const state = stateOnlyMatch?.groups?.state?.toUpperCase() ?? null;
+    const state = stateOnlyMatch?.[1]?.toUpperCase() ?? null;
     if (!state || !BRAZILIAN_STATES.has(state)) {
       return { city: null, state: null, cityState: null };
     }
     return { city: null, state, cityState: state };
   }
 
-  const city = normalizeSegment(match.groups.city);
-  const state = match.groups.state.toUpperCase();
+  const city = normalizeSegment(match[1] ?? "");
+  const state = (match[2] ?? "").toUpperCase();
 
   if (!city || !BRAZILIAN_STATES.has(state)) {
     return { city: null, state: null, cityState: null };
