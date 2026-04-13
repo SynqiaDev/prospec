@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { db } from "@/db";
 import { leads, projects } from "@/db/schema";
+import { parseBrazilAddress } from "@/lib/address-parser";
 
 const createLeadSchema = z.object({
   name: z.string().trim().min(1, "Nome é obrigatório"),
@@ -93,6 +94,7 @@ export async function POST(request: Request) {
   }
 
   const parsedLead = validation.data;
+  const parsedAddress = parseBrazilAddress(parsedLead.address);
 
   try {
     const [project] = await db
@@ -127,6 +129,8 @@ export async function POST(request: Request) {
       .insert(leads)
       .values({
         ...parsedLead,
+        city: parsedAddress.city,
+        state: parsedAddress.state,
         contact_date: parsedLead.contact_date ?? null,
         conversion_date: parsedLead.conversion_date ?? null,
       })

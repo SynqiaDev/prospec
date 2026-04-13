@@ -91,6 +91,8 @@ export const leads = pgTable("leads", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
   address: text("address"),
+  city: text("city"),
+  state: text("state"),
   phone: text("phone"),
   whatsapp_number: text("whatsapp_number"),
   website_url: text("website_url"),

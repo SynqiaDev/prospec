@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { InferSelectModel } from "drizzle-orm";
-import { BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
+import { AtSign, BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,6 +58,16 @@ export function createLeadColumns(handlers: {
       cell: ({ row }) => <span className="font-medium">{row.getValue("name")}</span>,
     },
     {
+      id: "city_state",
+      header: "Cidade - UF",
+      cell: ({ row }) => {
+        const { city, state } = row.original;
+        if (city && state) return `${city} - ${state}`;
+        if (state) return state;
+        return city ?? "—";
+      },
+    },
+    {
       accessorKey: "phone",
       header: "Telefone",
       cell: ({ row }) => {
@@ -106,7 +116,7 @@ export function createLeadColumns(handlers: {
             rel="noreferrer"
             className="text-primary underline-offset-4 hover:underline text-sm"
           >
-            link
+            <AtSign className="h-4 w-4" />
           </a>
         );
       },

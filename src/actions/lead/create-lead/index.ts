@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { db } from "@/db";
 import { leads } from "@/db/schema";
+import { parseBrazilAddress } from "@/lib/address-parser";
 import { actionClient } from "@/lib/next-safe-action";
 
 const schema = z.object({
@@ -28,11 +29,14 @@ export const createLead = actionClient
   .action(async ({ parsedInput }) => {
     const { project_id, google_rating, google_review_count, contact_date, conversion_date, ...rest } =
       parsedInput;
+    const parsedAddress = parseBrazilAddress(rest.address);
 
     const [newLead] = await db
       .insert(leads)
       .values({
         ...rest,
+        city: parsedAddress.city,
+        state: parsedAddress.state,
         project_id,
         google_rating: google_rating ?? undefined,
         google_review_count: google_review_count ?? undefined,

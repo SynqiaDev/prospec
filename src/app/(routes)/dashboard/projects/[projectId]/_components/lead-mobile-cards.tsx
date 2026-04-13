@@ -54,6 +54,7 @@ export function LeadMobileCards({
           .map((v) => formatBrazilPhoneDisplay(v!))
           .filter(Boolean)
           .join(" · ");
+        const cityState = lead.city && lead.state ? `${lead.city} - ${lead.state}` : (lead.state ?? lead.city);
         const waHref = buildWhatsappHref(lead.whatsapp_number);
 
         return (
@@ -67,6 +68,7 @@ export function LeadMobileCards({
                 {phoneLine ? (
                   <p className="mt-0.5 truncate text-xs text-muted-foreground">{phoneLine}</p>
                 ) : null}
+                <p className="mt-0.5 truncate text-xs text-muted-foreground">{cityState ?? "—"}</p>
                 {hasGoogle ? (
                   <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                     <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />

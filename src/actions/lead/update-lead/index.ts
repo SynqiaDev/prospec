@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { db } from "@/db";
 import { leads } from "@/db/schema";
+import { parseBrazilAddress } from "@/lib/address-parser";
 import { actionClient } from "@/lib/next-safe-action";
 
 const schema = z.object({
@@ -30,11 +31,25 @@ export const updateLead = actionClient
   .action(async ({ parsedInput }) => {
     const { id, project_id, google_rating, google_review_count, contact_date, conversion_date, ...rest } =
       parsedInput;
+    const [currentLead] = await db
+      .select({ address: leads.address })
+      .from(leads)
+      .where(eq(leads.id, id))
+      .limit(1);
+
+    if (!currentLead) {
+      return { success: false, error: "Lead não encontrado" };
+    }
+
+    const addressChanged = rest.address !== undefined && rest.address !== currentLead.address;
+    const parsedAddress = addressChanged ? parseBrazilAddress(rest.address) : null;
 
     const [updated] = await db
       .update(leads)
       .set({
         ...rest,
+        city: addressChanged ? parsedAddress?.city ?? null : undefined,
+        state: addressChanged ? parsedAddress?.state ?? null : undefined,
         google_rating: google_rating === null ? null : google_rating,
         google_review_count:
           google_review_count === undefined
@@ -45,10 +60,6 @@ export const updateLead = actionClient
       })
       .where(eq(leads.id, id))
       .returning();
-
-    if (!updated) {
-      return { success: false, error: "Lead não encontrado" };
-    }
 
     revalidatePath(`/dashboard/projects/${project_id}`);
     revalidatePath("/dashboard");
