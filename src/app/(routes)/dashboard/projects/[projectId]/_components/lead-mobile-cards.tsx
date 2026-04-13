@@ -20,6 +20,8 @@ import {
 interface LeadMobileCardsProps {
   projectId: string;
   leads: LeadRow[];
+  /** Total de leads do projeto (antes do filtro). Usado para mensagem quando a lista filtrada está vazia. */
+  projectLeadCount?: number;
   onEdit: (lead: LeadRow) => void;
   onDelete: (lead: LeadRow) => void;
   onConvert: (lead: LeadRow) => void;
@@ -28,14 +30,18 @@ interface LeadMobileCardsProps {
 export function LeadMobileCards({
   projectId,
   leads,
+  projectLeadCount,
   onEdit,
   onDelete,
   onConvert,
 }: LeadMobileCardsProps) {
   if (leads.length === 0) {
+    const total = projectLeadCount ?? 0;
+    const message =
+      total > 0 ? "Nenhum lead corresponde aos filtros." : "Nenhum lead neste projeto.";
     return (
       <p className="rounded-lg border border-dashed py-10 text-center text-sm text-muted-foreground">
-        Nenhum lead neste projeto.
+        {message}
       </p>
     );
   }
