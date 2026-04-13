@@ -67,6 +67,9 @@ export function AppSidebar() {
                     >
                       <Link href={item.url}>
                         <item.icon className="h-5 w-5 shrink-0" />
+                        <span className="truncate group-data-[collapsible=icon]:hidden">
+                          {item.label}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
