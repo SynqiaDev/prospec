@@ -90,6 +90,7 @@ export const projects = pgTable("projects", {
 export const leads = pgTable("leads", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
+  lead_source: text("lead_source").notNull().default("manual"),
   address: text("address"),
   city: text("city"),
   state: text("state"),

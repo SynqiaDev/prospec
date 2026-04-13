@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { leads } from "@/db/schema";
+import { getLeadSourceLabel } from "@/lib/lead-source";
 import { formatBrazilPhoneDisplay } from "@/lib/phone-format";
 import { buildWhatsappHref } from "@/lib/whatsapp-url";
 
@@ -135,6 +136,14 @@ export function createLeadColumns(handlers: {
             <span className="text-muted-foreground">({count})</span>
           </div>
         );
+      },
+    },
+    {
+      accessorKey: "lead_source",
+      header: "Origem",
+      cell: ({ row }) => {
+        const source = row.getValue("lead_source") as string | null;
+        return <Badge variant="secondary">{getLeadSourceLabel(source)}</Badge>;
       },
     },
     {

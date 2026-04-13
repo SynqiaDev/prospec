@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { LEAD_SOURCE_OPTIONS, LEAD_SOURCE_VALUES } from "@/lib/lead-source";
 
 import type { LeadRow } from "./lead-columns";
 
@@ -35,6 +36,7 @@ const optionalDate = z.string().optional();
 
 const leadFormSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
+  lead_source: z.enum(LEAD_SOURCE_VALUES),
   address: z.string().optional(),
   phone: z.string().optional(),
   whatsapp_number: z.string().optional(),
@@ -117,6 +119,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
     defaultValues: defaultValues
       ? {
           name: defaultValues.name,
+          lead_source: (defaultValues.lead_source as (typeof LEAD_SOURCE_VALUES)[number]) ?? "manual",
           address: defaultValues.address ?? "",
           phone: defaultValues.phone ?? "",
           whatsapp_number: defaultValues.whatsapp_number ?? "",
@@ -135,6 +138,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
         }
       : {
           name: "",
+          lead_source: "manual",
           address: "",
           phone: "",
           whatsapp_number: "",
@@ -186,6 +190,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
       executeUpdate({
         id: defaultValues.id,
         name: values.name,
+        lead_source: values.lead_source,
         address: emptyOptionalText(values.address),
         phone: emptyOptionalText(values.phone),
         whatsapp_number: emptyOptionalText(values.whatsapp_number),
@@ -207,6 +212,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
 
     executeCreate({
       name: values.name,
+      lead_source: values.lead_source,
       address: values.address || undefined,
       phone: values.phone || undefined,
       whatsapp_number: values.whatsapp_number || undefined,
@@ -244,6 +250,32 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
           />
         </div>
         <div className="xl:col-span-7">
+          <FormField
+            control={form.control}
+            name="lead_source"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Origem</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="h-10 w-full">
+                      <SelectValue placeholder="Selecione" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {LEAD_SOURCE_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="xl:col-span-12">
           <FormField
             control={form.control}
             name="address"

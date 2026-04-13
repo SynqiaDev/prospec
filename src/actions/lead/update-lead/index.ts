@@ -7,11 +7,13 @@ import { z } from "zod";
 import { db } from "@/db";
 import { leads } from "@/db/schema";
 import { parseBrazilAddress } from "@/lib/address-parser";
+import { LEAD_SOURCE_VALUES } from "@/lib/lead-source";
 import { actionClient } from "@/lib/next-safe-action";
 
 const schema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, "Nome é obrigatório"),
+  lead_source: z.enum(LEAD_SOURCE_VALUES).default("manual"),
   address: z.string().nullish(),
   phone: z.string().nullish(),
   whatsapp_number: z.string().nullish(),

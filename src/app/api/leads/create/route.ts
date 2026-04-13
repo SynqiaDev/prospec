@@ -5,22 +5,32 @@ import { z } from "zod";
 import { db } from "@/db";
 import { leads, projects } from "@/db/schema";
 import { parseBrazilAddress } from "@/lib/address-parser";
+import { LEAD_SOURCE_VALUES } from "@/lib/lead-source";
 
-const createLeadSchema = z.object({
-  name: z.string().trim().min(1, "Nome é obrigatório"),
-  address: z.string().trim().optional(),
-  phone: z.string().trim().optional(),
-  whatsapp_number: z.string().trim().optional(),
-  website_url: z.string().trim().optional(),
-  google_rating: z.number().min(0).max(5).optional(),
-  google_review_count: z.number().int().min(0).optional(),
-  observations: z.string().trim().optional(),
-  contact_status: z.string().default("pending"),
-  contact_date: z.coerce.date().optional().nullable(),
-  conversion_status: z.string().default("not_converted"),
-  conversion_date: z.coerce.date().optional().nullable(),
-  project_id: z.string().uuid("project_id deve ser um UUID válido"),
-});
+const leadSourceSchema = z.enum(LEAD_SOURCE_VALUES);
+
+const createLeadSchema = z
+  .object({
+    name: z.string().trim().min(1, "Nome é obrigatório"),
+    lead_source: leadSourceSchema.optional(),
+    leadSource: leadSourceSchema.optional(),
+    address: z.string().trim().optional(),
+    phone: z.string().trim().optional(),
+    whatsapp_number: z.string().trim().optional(),
+    website_url: z.string().trim().optional(),
+    google_rating: z.number().min(0).max(5).optional(),
+    google_review_count: z.number().int().min(0).optional(),
+    observations: z.string().trim().optional(),
+    contact_status: z.string().default("pending"),
+    contact_date: z.coerce.date().optional().nullable(),
+    conversion_status: z.string().default("not_converted"),
+    conversion_date: z.coerce.date().optional().nullable(),
+    project_id: z.string().uuid("project_id deve ser um UUID válido"),
+  })
+  .transform(({ lead_source, leadSource, ...rest }) => ({
+    ...rest,
+    lead_source: lead_source ?? leadSource ?? "manual",
+  }));
 
 type ApiErrorResponse = {
   success: false;

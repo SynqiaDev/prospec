@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { BookText, MessageCircle, Pencil, Star, Trash2, UserCheck } from "lucide-react";
 import Link from "next/link";
+import { getLeadSourceLabel } from "@/lib/lead-source";
 import { formatBrazilPhoneDisplay } from "@/lib/phone-format";
 import { buildWhatsappHref } from "@/lib/whatsapp-url";
 
@@ -157,6 +158,9 @@ export function LeadMobileCards({
               </div>
             </div>
             <div className="mt-2.5 flex flex-wrap gap-1.5">
+              <Badge variant="secondary" className="text-xs font-normal">
+                {getLeadSourceLabel(lead.lead_source)}
+              </Badge>
               <Badge variant={contactStatusVariants[contactKey] ?? "outline"} className="text-xs font-normal">
                 {contactStatusLabels[contactKey] ?? contactKey}
               </Badge>
