@@ -118,39 +118,39 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
     resolver: zodResolver(leadFormSchema),
     defaultValues: defaultValues
       ? {
-          name: defaultValues.name,
-          lead_source: (defaultValues.lead_source as (typeof LEAD_SOURCE_VALUES)[number]) ?? "manual",
-          address: defaultValues.address ?? "",
-          phone: defaultValues.phone ?? "",
-          whatsapp_number: defaultValues.whatsapp_number ?? "",
-          website_url: defaultValues.website_url ?? "",
-          google_rating:
-            defaultValues.google_rating != null ? String(defaultValues.google_rating) : "",
-          google_review_count:
-            defaultValues.google_review_count != null
-              ? String(defaultValues.google_review_count)
-              : "",
-          observations: defaultValues.observations ?? "",
-          contact_status: defaultValues.contact_status,
-          contact_date: toDatetimeLocalValue(defaultValues.contact_date),
-          conversion_status: defaultValues.conversion_status,
-          conversion_date: toDatetimeLocalValue(defaultValues.conversion_date),
-        }
+        name: defaultValues.name,
+        lead_source: (defaultValues.lead_source as (typeof LEAD_SOURCE_VALUES)[number]) ?? "manual",
+        address: defaultValues.address ?? "",
+        phone: defaultValues.phone ?? "",
+        whatsapp_number: defaultValues.whatsapp_number ?? "",
+        website_url: defaultValues.website_url ?? "",
+        google_rating:
+          defaultValues.google_rating != null ? String(defaultValues.google_rating) : "",
+        google_review_count:
+          defaultValues.google_review_count != null
+            ? String(defaultValues.google_review_count)
+            : "",
+        observations: defaultValues.observations ?? "",
+        contact_status: defaultValues.contact_status,
+        contact_date: toDatetimeLocalValue(defaultValues.contact_date),
+        conversion_status: defaultValues.conversion_status,
+        conversion_date: toDatetimeLocalValue(defaultValues.conversion_date),
+      }
       : {
-          name: "",
-          lead_source: "manual",
-          address: "",
-          phone: "",
-          whatsapp_number: "",
-          website_url: "",
-          google_rating: "",
-          google_review_count: "",
-          observations: "",
-          contact_status: "pending",
-          contact_date: "",
-          conversion_status: "not_converted",
-          conversion_date: "",
-        },
+        name: "",
+        lead_source: "manual",
+        address: "",
+        phone: "",
+        whatsapp_number: "",
+        website_url: "",
+        google_rating: "",
+        google_review_count: "",
+        observations: "",
+        contact_status: "pending",
+        contact_date: "",
+        conversion_status: "not_converted",
+        conversion_date: "",
+      },
   });
 
   const { execute: executeCreate, status: createStatus } = useAction(createLead, {
@@ -234,61 +234,37 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-h-[min(70vh,36rem)] space-y-4 overflow-y-auto pr-1 sm:max-h-[75vh] xl:grid xl:max-h-[85vh] xl:grid-cols-12 xl:gap-x-4 xl:gap-y-3 xl:space-y-0"
       >
-        <div className="xl:col-span-5">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nome do estabelecimento" className="min-h-10" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="xl:col-span-7">
-          <FormField
-            control={form.control}
-            name="lead_source"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Origem</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:contents">
+          <div className="xl:col-span-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <SelectTrigger className="h-10 w-full">
-                      <SelectValue placeholder="Selecione" />
-                    </SelectTrigger>
+                    <Input placeholder="Nome do estabelecimento" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    {LEAD_SOURCE_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="xl:col-span-12">
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Endereço</FormLabel>
-                <FormControl>
-                  <Input placeholder="Opcional" className="min-h-10" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="xl:col-span-6">
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Endereço</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Opcional" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:contents">
           <div className="xl:col-span-4">
@@ -299,7 +275,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormItem>
                   <FormLabel>Telefone</FormLabel>
                   <FormControl>
-                    <Input placeholder="Opcional" className="min-h-10" {...field} />
+                    <Input placeholder="Opcional" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -314,7 +290,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormItem>
                   <FormLabel>WhatsApp</FormLabel>
                   <FormControl>
-                    <Input placeholder="Opcional" className="min-h-10" {...field} />
+                    <Input placeholder="Opcional" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -330,7 +306,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
               <FormItem>
                 <FormLabel>Site</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://..." className="min-h-10" {...field} />
+                  <Input placeholder="https://..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -338,7 +314,33 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
           />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:contents">
-          <div className="xl:col-span-3">
+          <div className="xl:col-span-4">
+            <FormField
+              control={form.control}
+              name="lead_source"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Origem</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {LEAD_SOURCE_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="xl:col-span-4">
             <FormField
               control={form.control}
               name="google_rating"
@@ -346,22 +348,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormItem>
                   <FormLabel>Nota Google (0–5)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: 4,5" className="min-h-10" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="xl:col-span-3">
-            <FormField
-              control={form.control}
-              name="google_review_count"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Qtd. avaliações</FormLabel>
-                  <FormControl>
-                    <Input type="number" min={0} placeholder="0" className="min-h-10" {...field} />
+                    <Input placeholder="Ex: 4,5" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -369,7 +356,22 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
             />
           </div>
         </div>
-        <div className="xl:col-span-6">
+        <div className="xl:col-span-4">
+          <FormField
+            control={form.control}
+            name="google_review_count"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Qtd. avaliações</FormLabel>
+                <FormControl>
+                  <Input type="number" min={0} placeholder="0" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="xl:col-span-12">
           <FormField
             control={form.control}
             name="observations"
@@ -378,9 +380,9 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormLabel>Observações</FormLabel>
                 <FormControl>
                   <Textarea
-                    rows={3}
+                    rows={4}
                     placeholder="Opcional"
-                    className="min-h-20 resize-y xl:min-h-14 xl:max-h-28 xl:py-2"
+                    className="min-h-30 w-full resize-y py-2"
                     {...field}
                   />
                 </FormControl>
@@ -399,7 +401,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                   <FormLabel>Status de contato</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-10 w-full">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                     </FormControl>
@@ -424,7 +426,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormItem>
                   <FormLabel>Data do contato</FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" className="min-h-10" {...field} />
+                    <Input type="datetime-local" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -442,7 +444,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                   <FormLabel>Status de conversão</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="h-10 w-full">
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                     </FormControl>
@@ -467,7 +469,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
                 <FormItem>
                   <FormLabel>Data da conversão</FormLabel>
                   <FormControl>
-                    <Input type="datetime-local" className="min-h-10" {...field} />
+                    <Input type="datetime-local" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -478,7 +480,7 @@ export const LeadForm = ({ projectId, defaultValues, onSuccess }: LeadFormProps)
         <div className="flex justify-end pt-2 xl:col-span-12 xl:pt-0">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button type="submit" disabled={busy} className="h-10 w-full min-h-10 sm:w-auto">
+              <Button type="submit" disabled={busy} className="w-full sm:w-auto">
                 {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
               </Button>
             </TooltipTrigger>
